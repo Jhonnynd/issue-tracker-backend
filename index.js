@@ -14,7 +14,7 @@ const TicketsController = require("./controllers/ticketsController.js");
 
 // initializing Controllers -> note the lowercase for the first word
 const usersController = new UsersController(user, user_role);
-const projectsController = new ProjectsController(project);
+const projectsController = new ProjectsController(project, user);
 const ticketsController = new TicketsController(ticket);
 
 // importing Routers

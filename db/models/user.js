@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       // this.hasMany(models.ticket_comment);
       // this.hasMany(models.ticket); // as
       // this.hasMany(models.ticket); // as
-      // this.belongsToMany(models.projects, { through: user_projects }); // user_projects
+      this.belongsToMany(models.project, { through: "user_project" }); // user_projects
     }
   }
   User.init(

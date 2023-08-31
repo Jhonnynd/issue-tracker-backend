@@ -10,8 +10,14 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.ticket_review);
       this.hasMany(models.ticket_attachment);
 
-      this.belongsTo(models.user, { as: "assigned_user" });
-      this.belongsTo(models.user, { as: "submitter" });
+      this.belongsTo(models.user, {
+        as: "assigned_user",
+        foreignKey: "assigned_user_id",
+      });
+      this.belongsTo(models.user, {
+        as: "submitter",
+        foreignKey: "submitter_id",
+      });
 
       this.belongsTo(models.project);
     }

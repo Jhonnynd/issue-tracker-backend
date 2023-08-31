@@ -1,9 +1,11 @@
+const { sequelize } = require("../db/models");
 const BaseController = require("./baseController");
 
 class ProjectsController extends BaseController {
-  constructor(model, user) {
+  constructor(model, user, user_project) {
     super(model);
     this.userModel = user;
+    this.user_projectModel = user_project;
   }
 
   async getOne(req, res) {
@@ -18,15 +20,29 @@ class ProjectsController extends BaseController {
   }
 
   async createOne(req, res) {
-    const { title, description, userId } = req.body;
+    const { title, description, submitter_id, userIds } = req.body;
+    console.log(req.body);
     try {
       const output = await this.model.create({
         title,
         description,
-        userId,
+        userId: submitter_id,
       });
+
+      const associations = userIds.map((userId) => {
+        return {
+          projectId: output.id,
+          userId,
+        };
+      });
+
+      const userProjects = await this.user_projectModel.bulkCreate(
+        associations
+      );
+
       return res.json({
         output,
+        userProjects,
         success: true,
         message: "Address processed successfully",
       });
@@ -35,13 +51,40 @@ class ProjectsController extends BaseController {
     }
   }
 
+  async destroyProject(req, res) {
+    const { projectId } = req.params;
+    const t = await sequelize.transaction();
+
+    try {
+      await this.user_projectModel.destroy(
+        {
+          where: { projectId },
+        },
+        { transaction: t }
+      );
+      await this.model.destroy(
+        {
+          where: { id: projectId },
+        },
+        { transaction: t }
+      );
+      await t.commit();
+
+      res.status(200).json({ message: "Project deleted" });
+    } catch (error) {
+      await t.rollback();
+
+      console.error("Error", error);
+      res.status(500).json({ error: "Failed" });
+    }
+  }
+
   async getProjectsFromUser(req, res) {
     try {
-      const userId = req.params.userId; // Assuming you're passing the userId in the route
+      const userId = req.params.userId;
       const user = await this.userModel.findByPk(userId, {
         include: {
           model: this.model,
-          through: "user_project",
         },
       });
 
@@ -51,8 +94,8 @@ class ProjectsController extends BaseController {
 
       return res.json(user.projects);
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Internal server error" });
+      console.error("Error: ", error);
+      return res.status(400).json({ error: true, msg: error.message });
     }
   }
 }

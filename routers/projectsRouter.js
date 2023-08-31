@@ -12,7 +12,10 @@ class ProjectsRouter {
       this.controller.getProjectsFromUser.bind(this.controller)
     );
     router.post("/", this.controller.createOne.bind(this.controller));
-
+    router.delete(
+      "/:projectId",
+      this.controller.destroyProject.bind(this.controller)
+    );
     return router;
   }
 }

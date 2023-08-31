@@ -5,7 +5,16 @@ require("dotenv").config();
 
 // importing DB
 const db = require("./db/models/index");
-const { user, user_role, project, ticket } = db;
+const {
+  user,
+  user_role,
+  project,
+  ticket,
+  user_project,
+  ticket_priority,
+  ticket_status,
+  ticket_type,
+} = db;
 
 // importing Controllers
 const UsersController = require("./controllers/usersController.js");
@@ -13,9 +22,21 @@ const ProjectsController = require("./controllers/projectsController.js");
 const TicketsController = require("./controllers/ticketsController.js");
 
 // initializing Controllers -> note the lowercase for the first word
-const usersController = new UsersController(user, user_role);
-const projectsController = new ProjectsController(project, user);
-const ticketsController = new TicketsController(ticket);
+const usersController = new UsersController(
+  user,
+  user_role,
+  project,
+  user_project
+);
+const projectsController = new ProjectsController(project, user, user_project);
+const ticketsController = new TicketsController(
+  ticket,
+  ticket_priority,
+  ticket_status,
+  ticket_type,
+  project,
+  user
+);
 
 // importing Routers
 const UsersRouter = require("./routers/usersRouter");

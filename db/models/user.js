@@ -5,9 +5,18 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user_role);
       this.hasMany(models.project);
       // this.hasMany(models.ticket_comment);
-      // this.hasMany(models.ticket); // as
-      // this.hasMany(models.ticket); // as
-      this.belongsToMany(models.project, { through: "user_project" }); // user_projects
+      this.hasMany(models.ticket, {
+        as: "assigned_user",
+        foreignKey: "assigned_user_id",
+      });
+      this.hasMany(models.ticket, {
+        as: "submitter",
+        foreignKey: "submitter_id",
+      });
+      this.belongsToMany(models.project, {
+        through: "user_project",
+        foreignKey: "user_id",
+      });
     }
   }
   User.init(

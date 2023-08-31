@@ -7,6 +7,10 @@ class TicketsRouter {
   }
   routes() {
     router.get("/", this.controller.getAll.bind(this.controller));
+    router.get(
+      "/list",
+      this.controller.getAllTicketsWithInfo.bind(this.controller)
+    );
 
     return router;
   }

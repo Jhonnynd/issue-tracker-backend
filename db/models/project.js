@@ -5,7 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user);
       // this.belongsTo(models.project_attachment);
       // this.hasMany(models.ticket);
-      this.belongsToMany(models.user, { through: "user_project" }); // user_projects
+      this.belongsToMany(models.user, {
+        through: "user_project",
+        foreignKey: "project_id",
+      });
     }
   }
   Project.init(

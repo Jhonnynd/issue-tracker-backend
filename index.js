@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
+const { auth } = require("express-oauth2-jwt-bearer");
 require("dotenv").config();
 
 // importing DB
@@ -74,6 +75,9 @@ app.use(cors(corsOptions));
 // Enable reading JSON request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(auth());
+const checkJwt = auth();
 
 // enable and use router
 app.use("/users", usersRouter.routes());

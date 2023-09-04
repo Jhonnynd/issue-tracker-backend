@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "user_project",
       underscored: true,
+      indexes: [
+        {
+          unique: true,
+          fields: ["project_id", "user_id"],
+        },
+      ],
     }
   );
   return User_project;

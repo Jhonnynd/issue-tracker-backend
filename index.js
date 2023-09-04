@@ -14,6 +14,9 @@ const {
   ticket_priority,
   ticket_status,
   ticket_type,
+  ticket_attachment,
+  projects_attachment,
+  ticket_comment,
 } = db;
 
 // importing Controllers
@@ -28,14 +31,23 @@ const usersController = new UsersController(
   project,
   user_project
 );
-const projectsController = new ProjectsController(project, user, user_project);
+const projectsController = new ProjectsController(
+  project,
+  user,
+  user_project,
+  ticket,
+  projects_attachment
+);
 const ticketsController = new TicketsController(
   ticket,
   ticket_priority,
   ticket_status,
   ticket_type,
   project,
-  user
+  user,
+  ticket_attachment,
+  user_role,
+  ticket_comment
 );
 
 // importing Routers

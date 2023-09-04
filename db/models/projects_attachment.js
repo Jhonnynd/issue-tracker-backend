@@ -1,19 +1,19 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Project_attachment extends Model {
+  class Projects_attachment extends Model {
     static associate(models) {
       this.belongsTo(models.project);
     }
   }
-  Project_attachment.init(
+  Projects_attachment.init(
     {
       url: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "project_attachment",
+      modelName: "projects_attachment",
       underscored: true,
     }
   );
-  return Project_attachment;
+  return Projects_attachment;
 };

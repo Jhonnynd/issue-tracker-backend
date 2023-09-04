@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
     static associate(models) {
       this.belongsTo(models.user);
-      // this.belongsTo(models.project_attachment);
-      // this.hasMany(models.ticket);
+      this.hasMany(models.projects_attachment);
+      this.hasMany(models.ticket);
       this.belongsToMany(models.user, {
         through: "user_project",
         foreignKey: "project_id",

@@ -68,7 +68,16 @@ class UsersController extends BaseController {
       const usersFromProject = await this.user_projectModel.findAll({
         where: { project_id: projectId },
 
-        include: [{ model: this.model }],
+        include: [
+          {
+            model: this.model,
+            include: [
+              {
+                model: this.user_roleModel,
+              },
+            ],
+          },
+        ],
       });
 
       return res.status(200).json(usersFromProject);

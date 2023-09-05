@@ -17,6 +17,8 @@ const {
   ticket_attachment,
   projects_attachment,
   ticket_comment,
+  ticket_review,
+  ticket_review_attachment,
 } = db;
 
 // importing Controllers
@@ -47,7 +49,9 @@ const ticketsController = new TicketsController(
   user,
   ticket_attachment,
   user_role,
-  ticket_comment
+  ticket_comment,
+  ticket_review,
+  ticket_review_attachment
 );
 
 // importing Routers

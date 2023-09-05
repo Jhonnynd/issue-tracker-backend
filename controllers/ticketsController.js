@@ -10,7 +10,9 @@ class TicketsController extends BaseController {
     user,
     ticket_attachment,
     user_role,
-    ticket_comment
+    ticket_comment,
+    ticket_review,
+    ticket_review_attachment
   ) {
     super(model);
     this.ticket_priorityModel = ticket_priority;
@@ -21,6 +23,8 @@ class TicketsController extends BaseController {
     this.ticket_attachmentModel = ticket_attachment;
     this.user_roleModel = user_role;
     this.ticket_commentModel = ticket_comment;
+    this.ticket_reviewModel = ticket_review;
+    this.ticket_review_attachmentModel = ticket_review_attachment;
   }
   async getOne(req, res) {
     try {
@@ -34,6 +38,10 @@ class TicketsController extends BaseController {
           this.ticket_typeModel,
           this.projectModel,
           this.ticket_attachmentModel,
+          {
+            model: this.ticket_reviewModel,
+            include: [this.ticket_review_attachmentModel],
+          },
           {
             model: this.userModel,
             as: "assigned_user",
@@ -238,5 +246,40 @@ class TicketsController extends BaseController {
       return res.status(400).json({ error: true, msg: error.message });
     }
   }
+
+  async submitTicketReview(req, res) {
+    try {
+      console.log("hi");
+      const { description, url } = req.body;
+
+      const ticketId = parseInt(req.params.ticketId, 10);
+
+      const updatedTicket = await this.model.update(
+        { ticketStatusId: 3 },
+        { where: { id: ticketId } }
+      );
+
+      const review = await this.ticket_reviewModel.create({
+        description,
+        ticketId,
+      });
+
+      if (url) {
+        const review_attachment =
+          await this.ticket_review_attachmentModel.create({
+            url,
+            ticketReviewId: review.id,
+          });
+      } else {
+        console.log("no url");
+      }
+
+      return res.status(200).json({ message: "review created" });
+    } catch (error) {
+      console.error(error);
+      return res.status(400).json({ error: true, message: error.message });
+    }
+  }
 }
+
 module.exports = TicketsController;

@@ -12,6 +12,10 @@ class TicketsRouter {
       "/ticket/:ticketId",
       this.controller.getOne.bind(this.controller)
     );
+    router.post(
+      "/:ticketId/review",
+      this.controller.submitTicketReview.bind(this.controller)
+    );
     router.get(
       "/:ticketId/comments",
       this.controller.getAllComments.bind(this.controller)

@@ -2,7 +2,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Ticket_review_attachment extends Model {
     static associate(models) {
-      this.hasMany(models.ticket_review);
+      this.belongsTo(models.ticket_review);
     }
   }
   Ticket_review_attachment.init(

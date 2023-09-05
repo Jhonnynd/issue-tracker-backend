@@ -33,8 +33,8 @@ class UsersController extends BaseController {
       const [checkedUser, created] = await this.model.findOrCreate({
         where: { email: loginEmail },
         defaults: {
-          firstName: givenName,
-          lastName: familyName,
+          first_name: givenName,
+          last_name: familyName,
           email: loginEmail,
           userRoleId: 3,
         },

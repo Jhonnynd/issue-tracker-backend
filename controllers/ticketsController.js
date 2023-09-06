@@ -87,10 +87,15 @@ class TicketsController extends BaseController {
       });
       console.log("this is the ticket", ticket);
 
-      const savedImageUrl = await this.ticket_attachmentModel.create({
-        url: url,
-        ticketId: ticket.id,
-      });
+      if (url) {
+        const savedImageUrl = await this.ticket_attachmentModel.create({
+          url: url,
+          ticketId: ticket.id,
+        });
+      } else {
+        console.log("no url");
+      }
+
       console.log("done");
       return res.status(200).json({ message: "Ticket successfully created!" });
     } catch (error) {

@@ -9,27 +9,68 @@ class UsersController extends BaseController {
   }
 
   // onLogin check if user exists, if not create
+  // async login(req, res) {
+  //   const user = req.body;
+  //   console.log("this is the user", user);
+  //   let givenName = "";
+  //   let familyName = "";
+  //   let loginEmail = "";
+  //   if (user.given_name !== "" && user.family_name !== "") {
+  //     const { given_name, family_name, email } = req.body;
+  //     givenName = given_name;
+  //     familyName = family_name;
+  //     loginEmail = email;
+  //     console.log(givenName, familyName, email);
+  //   } else {
+  //     const { email } = req.body;
+  //     givenName = null;
+  //     familyName = null;
+  //     loginEmail = email;
+  //     console.log(givenName, familyName, email);
+  //   }
+  //   try {
+  //     console.log("I'm in login try: b4 findone");
+  //     const [checkedUser, created] = await this.model.findOrCreate({
+  //       where: { email: loginEmail },
+  //       defaults: {
+  //         first_name: givenName,
+  //         last_name: familyName,
+  //         email: loginEmail,
+  //         userRoleId: 3,
+  //       },
+  //     });
+
+  //     if (created) {
+  //       console.log("User Created!");
+  //     } else {
+  //       console.log("User retrieved!");
+  //     }
+
+  //     return res.json({ checkedUser });
+  //   } catch (err) {
+  //     console.log(err.message);
+
+  //     console.log("I'm in login catch-try-catch: error");
+  //     return res.status(400).json({ error: true, msg: err.message });
+  //   }
+  // }
+
   async login(req, res) {
     const user = req.body;
-    console.log("this is the user", user);
-    let givenName = "";
-    let familyName = "";
-    let loginEmail = "";
-    if (user.given_name !== "" && user.family_name !== "") {
-      const { given_name, family_name, email } = req.body;
-      givenName = given_name;
-      familyName = family_name;
-      loginEmail = email;
-      console.log(givenName, familyName, email);
-    } else {
-      const { email } = req.body;
-      givenName = null;
-      familyName = null;
-      loginEmail = email;
-      console.log(givenName, familyName, email);
+
+    let givenName = null;
+    let familyName = null;
+    let loginEmail = user.email;
+
+    if (user.given_name && user.family_name) {
+      givenName = user.given_name;
+      familyName = user.family_name;
+    } else if (user.nickname) {
+      givenName = user.nickname;
+      familyName = user.nickname;
     }
+
     try {
-      console.log("I'm in login try: b4 findone");
       const [checkedUser, created] = await this.model.findOrCreate({
         where: { email: loginEmail },
         defaults: {
@@ -49,8 +90,26 @@ class UsersController extends BaseController {
       return res.json({ checkedUser });
     } catch (err) {
       console.log(err.message);
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
 
-      console.log("I'm in login catch-try-catch: error");
+  async updateUser(req, res) {
+    const { email, firstName, lastName, userRoleId } = req.body;
+    const { userId } = req.params;
+    try {
+      const output = await this.model.update(
+        {
+          email,
+          firstName,
+          lastName,
+          userRoleId,
+        },
+        { where: { id: userId } }
+      );
+      return res.json({ message: "Successfully updated!" });
+    } catch (err) {
+      console.log(err);
       return res.status(400).json({ error: true, msg: err.message });
     }
   }
@@ -88,7 +147,7 @@ class UsersController extends BaseController {
     }
   }
 
-  async updateUser(req, res) {
+  async updateUserRole(req, res) {
     try {
       const userId = req.params.userId;
       const { userRoleId } = req.body;
@@ -108,7 +167,6 @@ class UsersController extends BaseController {
   }
 
   async getUsersFromAProject(req, res) {
-    //idk whats happenin here
     try {
       const projectId = req.params.projectId;
 

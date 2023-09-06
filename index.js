@@ -79,8 +79,7 @@ app.use(cors(corsOptions));
 // Enable reading JSON request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-console.log(process.env);
-// app.use(auth());
+
 const checkJwt = auth({
   audience: "https://issue-tracker/api",
   issuerBaseURL: "https://dev-nwiejrl7253lmbu0.us.auth0.com/",
@@ -88,7 +87,7 @@ const checkJwt = auth({
 
 // enable and use router
 app.use("/users", usersRouter.routes());
-app.use("/projects", checkJwt, projectsRouter.routes());
+app.use("/projects", projectsRouter.routes());
 app.use("/tickets", ticketsRouter.routes());
 
 app.listen(PORT, () => {

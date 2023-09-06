@@ -8,7 +8,11 @@ class UsersRouter {
   routes() {
     router.get("/", this.controller.getAll.bind(this.controller));
     router.post("/login", this.controller.login.bind(this.controller));
-    router.put("/:userId", this.controller.updateUser.bind(this.controller));
+    router.put(
+      "/:userId/role",
+      this.controller.updateUserRole.bind(this.controller)
+    );
+    router.put("/:userId/", this.controller.updateUser.bind(this.controller));
 
     router.get(
       "/list",

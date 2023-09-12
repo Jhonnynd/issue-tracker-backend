@@ -7,9 +7,6 @@ app = "issue-tracker-backend"
 primary_region = "sin"
 
 [build]
- 
- [deploy]
-  release_command = "sh ./release.sh"
 
 [http_service]
   internal_port = 3000

@@ -90,6 +90,10 @@ app.use("/users", usersRouter.routes());
 app.use("/projects", projectsRouter.routes());
 app.use("/tickets", ticketsRouter.routes());
 
+app.get("/", (req, res) => {
+  res.send("this is from github actions!");
+});
+
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
 });
